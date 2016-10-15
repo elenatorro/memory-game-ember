@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import {Card} from 'memory-game/constants/cards';
 import {Game} from 'memory-game/constants/game';
+import ENV from 'memory-game/config/environment';
 
 export default Ember.Component.extend({
   classNameBindings: [
@@ -28,11 +29,11 @@ export default Ember.Component.extend({
   }),
 
   cardFrontImageURL: Ember.computed('card', function() {
-    return `/assets/images/${this.get('card.name')}.png`;
+    return `${ENV.rootURL}assets/images/${this.get('card.name')}.png`;
   }),
 
   cardBackImageURL: Ember.computed('card', function() {
-    return `/assets/images/${Card.BACK_IMAGE_NAME}.png`;
+    return `${ENV.rootURL}assets/images/${Card.BACK_IMAGE_NAME}.png`;
   }),
 
   actions: {
