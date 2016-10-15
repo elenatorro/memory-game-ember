@@ -1,0 +1,17 @@
+<div class="section center">
+  <h1 class="header center deep-orange-text mg-title">{{t 'game.level.template.level'}}: {{level-name name=model.game.level}}</h1>
+
+  <div class="row center">
+    {{game-board game=model.game}}
+  </div>
+
+  {{#if model.game.isFinished}}
+    <p class="mg-game-board-finished-message deep-orange-text">{{t 'game.level.template.wellDoneYouWon'}}</p>
+  {{else}}
+    <p class="mg-game-board-finished-message deep-orange-text">{{t 'game.level.template.clickOnTheCards'}}</p>
+  {{/if}}
+
+  <button class="btn-large waves-effect waves-light purple darken-2 mg-level-button" {{action 'goBack'}}>{{t 'game.level.template.finishAndGoBack'}}</button>
+</div>
+
+{{outlet}}

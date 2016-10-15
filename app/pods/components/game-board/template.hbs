@@ -1,0 +1,3 @@
+{{#each game.gameCards as |card|}}
+  {{game-card card=card on-card-is-turned='cardHasBeenTurned' isGameLocked=game.isLocked}}
+{{/each}}

@@ -1,0 +1,13 @@
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <h1 class="header center deep-orange-text mg-title">{{t 'game.start.template.selectLevel'}}</h1>
+
+    <div class="row center mg-button-group">
+      {{#each model.levels as |level| }}
+        <button class="btn-large waves-effect waves-light purple darken-2 mg-level-button" {{action 'goToLevel' level}}>{{t 'game.start.template.level'}}: {{level-name name=level}}</button>
+      {{/each}}
+    </div>
+  </div>
+</div>
+
+{{outlet}}

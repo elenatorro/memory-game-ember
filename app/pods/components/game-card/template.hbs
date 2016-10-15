@@ -1,0 +1,18 @@
+<div class="mg-game-card-flipper {{if card.isTurned 'turned'}}" {{action 'selectCard'}}>
+  <div class="mg-game-card waves-dark hoverable mg-game-card-back">
+    <div class="mg-game-card-image">
+      <img src="{{cardFrontImageURL}}">
+    </div>
+    <div class="mg-game-card-text">
+      <p>{{t cardNameLocale}}</p>
+    </div>
+  </div>
+  <div class="mg-game-card waves-light hoverable mg-game-card-reverse mg-game-card-front">
+    <div class="mg-game-card-image">
+      <img src="{{cardBackImageURL}}">
+    </div>
+    <div class="mg-game-card-text">
+      <p>{{t 'application.title'}}</p>
+    </div>
+  </div>
+</div>

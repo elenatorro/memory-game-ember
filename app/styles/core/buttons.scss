@@ -1,0 +1,23 @@
+/**
+* Component: Buttons
+*
+*/
+
+/**
+* Variables
+* -------------------------------------------------------------------- */
+
+/**
+* Style
+* -------------------------------------------------------------------- */
+
+
+@media (max-width: $mg-phablet-max-size) {
+  .mg-button-group {
+    > .btn, .btn-large {
+      width: 100%;
+      display: block;
+      margin: 1em 0;
+    }
+  }
+}
