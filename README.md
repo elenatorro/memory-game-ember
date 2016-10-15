@@ -2,7 +2,9 @@
 
 Game example built with Ember
 
-![](live_demo.gif)
+Play! [https://elenatorro.github.io/memory-game-ember/](https://elenatorro.github.io/memory-game-ember/)
+
+![demo](live_demo.gif)
 
 ## General Ember Project Install
 
