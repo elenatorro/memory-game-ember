@@ -28,11 +28,11 @@ export default Ember.Component.extend({
   }),
 
   cardFrontImageURL: Ember.computed('card', function() {
-    return `/images/${this.get('card.name')}.png`;
+    return `/assets/images/${this.get('card.name')}.png`;
   }),
 
   cardBackImageURL: Ember.computed('card', function() {
-    return `/images/${Card.BACK_IMAGE_NAME}.png`;
+    return `/assets/images/${Card.BACK_IMAGE_NAME}.png`;
   }),
 
   actions: {

@@ -1019,11 +1019,11 @@ define('memory-game/pods/components/game-card/component', ['exports', 'ember', '
     }),
 
     cardFrontImageURL: _ember['default'].computed('card', function () {
-      return '/images/' + this.get('card.name') + '.png';
+      return '/assets/images/' + this.get('card.name') + '.png';
     }),
 
     cardBackImageURL: _ember['default'].computed('card', function () {
-      return '/images/' + _memoryGameConstantsCards.Card.BACK_IMAGE_NAME + '.png';
+      return '/assets/images/' + _memoryGameConstantsCards.Card.BACK_IMAGE_NAME + '.png';
     }),
 
     actions: {
@@ -1254,7 +1254,7 @@ define("memory-game/pods/components/nav-sidebar/template", ["exports"], function
         var el3 = dom.createElement("img");
         dom.setAttribute(el3, "alt", "Memory game logo");
         dom.setAttribute(el3, "class", "responsive-img mg-image-small");
-        dom.setAttribute(el3, "src", "/images/brainstorming.png");
+        dom.setAttribute(el3, "src", "/assets/images/brainstorming.png");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
@@ -2089,7 +2089,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("memory-game/app")["default"].create({"name":"memory-game","version":"0.0.0+b5668eb1"});
+  require("memory-game/app")["default"].create({"name":"memory-game","version":"0.0.0+ab44e75f"});
 }
 
 /* jshint ignore:end */

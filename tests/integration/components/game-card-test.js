@@ -61,8 +61,8 @@ test('it should be able display a game card', function(assert) {
     assert.equal(_gameCardBackText.text().trim(), localesEN.components.gameCard.template.cards[name]);
     assert.equal(_gameCardFrontText.text().trim(), localesEN.application.title);
 
-    assert.equal(_gameCardBackImage.prop('src'), `${window.location.origin}/images/${name}.png`);
-    assert.equal(_gameCardFrontImage.prop('src'), `${window.location.origin}/images/${Card.BACK_IMAGE_NAME}.png`);
+    assert.equal(_gameCardBackImage.prop('src'), `${window.location.origin}/assets/images/${name}.png`);
+    assert.equal(_gameCardFrontImage.prop('src'), `${window.location.origin}/assets/images/${Card.BACK_IMAGE_NAME}.png`);
 
     _changeToSpanishButton.click();
     _gameCardBackText = this.$('.mg-game-card-text').eq(0);
