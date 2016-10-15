@@ -28,7 +28,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV.apiURL = 'TODO';
+    ENV.apiURL = 'memory-game-ember/api';
     ENV.useApi = false;
   }
 
