@@ -20,19 +20,19 @@
 * -------------------------------------------------------------------- */
 @font-face {
   font-family: "Caveat Brush";
-  src: url("/fonts/Caveat_Brush/CaveatBrush-Regular.ttf"); }
+  src: url("fonts/Caveat_Brush/CaveatBrush-Regular.ttf"); }
 
 @font-face {
   font-family: "Patrick Hand";
-  src: url("/fonts/Patrick_Hand/PatrickHand-Regular.ttf"); }
+  src: url("fonts/Patrick_Hand/PatrickHand-Regular.ttf"); }
 
 @font-face {
   font-family: "Ubuntu Bold";
-  src: url("/fonts/Ubuntu/Ubuntu-Bold.ttf"); }
+  src: url("fonts/Ubuntu/Ubuntu-Bold.ttf"); }
 
 @font-face {
   font-family: "Ubuntu Regular";
-  src: url("/fonts/Ubuntu/Ubuntu-Regular.ttf"); }
+  src: url("fonts/Ubuntu/Ubuntu-Regular.ttf"); }
 
 /**
 * Component: Images
@@ -74,7 +74,7 @@
 * Style
 * -------------------------------------------------------------------- */
 html {
-  background: url("/images/background.png") no-repeat center center fixed;
+  background: url("images/background.png") no-repeat center center fixed;
   font-family: "Ubuntu Regular";
   -webkit-background-size: cover;
   -moz-background-size: cover;
