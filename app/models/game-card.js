@@ -1,9 +1,13 @@
 import DS from 'ember-data';
-import CardModel from 'memory-game/models/card';
+import CardModel from './card';
+
+const {
+  attr,
+  belongsTo
+} = DS;
 
 export default CardModel.extend({
-  UUID:     DS.attr('string'),
-  game:     DS.belongsTo('game'),
-  isTurned: DS.attr('boolean'),
-  isPaired: DS.attr('boolean')
+  game:     belongsTo('game'),
+  isTurned: attr('boolean'),
+  isPaired: attr('boolean')
 });

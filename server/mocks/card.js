@@ -4,199 +4,392 @@ module.exports = function(app) {
   var cardRouter = express.Router();
 
   cardRouter.get('/', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.send({
-      cards: [
+      data: [
           {
-            name: 'alpaca',
-            meta: {}
+            id: 1,
+            type: 'card',
+            attributes: {
+              name: 'alpaca',
+              meta: {}
+            }
           },
           {
-            name: 'anteater',
-            meta: {}
+            id: 2,
+            type: 'card',
+            attributes: {
+              name: 'anteater',
+              meta: {}
+            }
           },
           {
-            name: 'bat',
-            meta: {}
+            id: 3,
+            type: 'card',
+            attributes: {
+              name: 'bat',
+              meta: {}
+            }
           },
           {
-            name: 'beetle',
-            meta: {}
+            id: 4,
+            type: 'card',
+            attributes: {
+              name: 'beetle',
+              meta: {}
+            }
           },
           {
-            name: 'butterfly',
-            meta: {}
+            id: 5,
+            type: 'card',
+            attributes: {
+              name: 'butterfly',
+              meta: {}
+            }
           },
           {
-            name: 'camel',
-            meta: {}
+            id: 6,
+            type: 'card',
+            attributes: {
+              name: 'camel',
+              meta: {}
+            }
           },
           {
-            name: 'cat',
-            meta: {}
+            id: 7,
+            type: 'card',
+            attributes: {
+              name: 'cat',
+              meta: {}
+            }
           },
           {
-            name: 'chameleon',
-            meta: {}
+            id: 8,
+            type: 'card',
+            attributes: {
+              name: 'chameleon',
+              meta: {}
+            }
           },
           {
-            name: 'cobra',
-            meta: {}
+            id: 9,
+            type: 'card',
+            attributes: {
+              name: 'cobra',
+              meta: {}
+            }
           },
           {
-            name: 'cow',
-            meta: {}
+            id: 10,
+            type: 'card',
+            attributes: {
+              name: 'cow',
+              meta: {}
+            }
           },
           {
-            name: 'crab',
-            meta: {}
+            id: 11,
+            type: 'card',
+            attributes: {
+              name: 'crab',
+              meta: {}
+            }
           },
           {
-            name: 'crocodile',
-            meta: {}
+            id: 12,
+            type: 'card',
+            attributes: {
+              name: 'crocodile',
+              meta: {}
+            }
           },
           {
-            name: 'dog',
-            meta: {}
+            id: 13,
+            type: 'card',
+            attributes: {
+              name: 'dog',
+              meta: {}
+            }
           },
           {
-            name: 'duck',
-            meta: {}
+            id: 14,
+            type: 'card',
+            attributes: {
+              name: 'duck',
+              meta: {}
+            }
           },
           {
-            name: 'elephant',
-            meta: {}
+            id: 15,
+            type: 'card',
+            attributes: {
+              name: 'elephant',
+              meta: {}
+            }
           },
           {
-            name: 'elk',
-            meta: {}
+            id: 16,
+            type: 'card',
+            attributes: {
+              name: 'elk',
+              meta: {}
+            }
           },
           {
-            name: 'fish',
-            meta: {}
+            id: 17,
+            type: 'card',
+            attributes: {
+              name: 'fish',
+              meta: {}
+            }
           },
           {
-            name: 'frog',
-            meta: {}
+            id: 18,
+            type: 'card',
+            attributes: {
+              name: 'frog',
+              meta: {}
+            }
           },
           {
-            name: 'giraffe',
-            meta: {}
+            id: 19,
+            type: 'card',
+            attributes: {
+              name: 'giraffe',
+              meta: {}
+            }
           },
           {
-            name: 'hen',
-            meta: {}
+            id: 20,
+            type: 'card',
+            attributes: {
+              name: 'hen',
+              meta: {}
+            }
           },
           {
-            name: 'hippopotamus',
-            meta: {}
+            id: 21,
+            type: 'card',
+            attributes: {
+              name: 'hippopotamus',
+              meta: {}
+            }
           },
           {
-            name: 'kangaroo',
-            meta: {}
+            id: 22,
+            type: 'card',
+            attributes: {
+              name: 'kangaroo',
+              meta: {}
+            }
           },
           {
-            name: 'macaw',
-            meta: {}
+            id: 23,
+            type: 'card',
+            attributes: {
+              name: 'macaw',
+              meta: {}
+            }
           },
           {
-            name: 'monkey',
-            meta: {}
+            id: 24,
+            type: 'card',
+            attributes: {
+              name: 'monkey',
+              meta: {}
+            }
           },
           {
-            name: 'mouse',
-            meta: {}
+            id: 25,
+            type: 'card',
+            attributes: {
+              name: 'mouse',
+              meta: {}
+            }
           },
           {
-            name: 'octopus',
-            meta: {}
+            id: 26,
+            type: 'card',
+            attributes: {
+              name: 'octopus',
+              meta: {}
+            }
           },
           {
-            name: 'ostrich',
-            meta: {}
+            id: 27,
+            type: 'card',
+            attributes: {
+              name: 'ostrich',
+              meta: {}
+            }
           },
           {
-            name: 'owl',
-            meta: {}
+            id: 28,
+            type: 'card',
+            attributes: {
+              name: 'owl',
+              meta: {}
+            }
           },
           {
-            name: 'panda',
-            meta: {}
+            id: 29,
+            type: 'card',
+            attributes: {
+              name: 'panda',
+              meta: {}
+            }
           },
           {
-            name: 'pelican',
-            meta: {}
+            id: 30,
+            type: 'card',
+            attributes: {
+              name: 'pelican',
+              meta: {}
+            }
           },
           {
-            name: 'penguin',
-            meta: {}
+            id: 31,
+            type: 'card',
+            attributes: {
+              name: 'penguin',
+              meta: {}
+            }
           },
           {
-            name: 'pig',
-            meta: {}
+            id: 32,
+            type: 'card',
+            attributes: {
+              name: 'pig',
+              meta: {}
+            }
           },
           {
-            name: 'rabbit',
-            meta: {}
+            id: 33,
+            type: 'card',
+            attributes: {
+              name: 'rabbit',
+              meta: {}
+            }
           },
           {
-            name: 'raccoon',
-            meta: {}
+            id: 34,
+            type: 'card',
+            attributes: {
+              name: 'raccoon',
+              meta: {}
+            }
           },
           {
-            name: 'rhinoceros',
-            meta: {}
+            id: 35,
+            type: 'card',
+            attributes: {
+              name: 'rhinoceros',
+              meta: {}
+            }
           },
           {
-            name: 'seaCow',
-            meta: {}
+            id: 36,
+            type: 'card',
+            attributes: {
+              name: 'seaCow',
+              meta: {}
+            }
           },
           {
-            name: 'shark',
-            meta: {}
+            id: 37,
+            type: 'card',
+            attributes: {
+              name: 'shark',
+              meta: {}
+            }
           },
           {
-            name: 'sheep',
-            meta: {}
+            id: 38,
+            type: 'card',
+            attributes: {
+              name: 'sheep',
+              meta: {}
+            }
           },
           {
-            name: 'sloth',
-            meta: {}
+            id: 39,
+            type: 'card',
+            attributes: {
+              name: 'sloth',
+              meta: {}
+            }
           },
           {
-            name: 'snake',
-            meta: {}
+            id: 40,
+            type: 'card',
+            attributes: {
+              name: 'snake',
+              meta: {}
+            }
           },
           {
-            name: 'spider',
-            meta: {}
+            id: 41,
+            type: 'card',
+            attributes: {
+              name: 'spider',
+              meta: {}
+            }
           },
           {
-            name: 'squirrel',
-            meta: {}
+            id: 42,
+            type: 'card',
+            attributes: {
+              name: 'squirrel',
+              meta: {}
+            }
           },
           {
-            name: 'stingray',
-            meta: {}
+            id: 43,
+            type: 'card',
+            attributes: {
+              name: 'stingray',
+              meta: {}
+            }
           },
           {
-            name: 'swan',
-            meta: {}
+            id: 44,
+            type: 'card',
+            attributes: {
+              name: 'swan',
+              meta: {}
+            }
           },
           {
-            name: 'tiger',
-            meta: {}
+            id: 45,
+            type: 'card',
+            attributes: {
+              name: 'tiger',
+              meta: {}
+            }
           },
           {
-            name: 'tortoise',
-            meta: {}
+            id: 46,
+            type: 'card',
+            attributes: {
+              name: 'tortoise',
+              meta: {}
+            }
           },
           {
-            name: 'toucan',
-            meta: {}
+            id: 47,
+            type: 'card',
+            attributes: {
+              name: 'toucan',
+              meta: {}
+            }
           },
           {
-            name: 'whale',
-            meta: {}
+            id: 48,
+            type: 'card',
+            attributes: {
+              name: 'whale',
+              meta: {}
+            }
           }]
       });
   });

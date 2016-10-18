@@ -1,19 +1,20 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  routeService: Ember.inject.service('route'),
-  storeService: Ember.inject.service('store'),
 
-  beforeModel() {
-    this.get('storeService').initGames();
-  },
+  model(params) {
 
-  model(level) {
-    return this.get('routeService').getGame(level.level_name);
+    const game = this.store.createRecord('game', {
+      level: params.level_name
+    });
+
+    game.spawnCards();
+
+    return game;
   },
 
   afterModel(model) {
-    if (!model.game.get('gameCards.length')) {
+    if (!model.get('gameCards.length')) {
       this.transitionTo('game.start');
     }
   },

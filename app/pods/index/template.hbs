@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="header center deep-orange-text mg-title mg-main-title">{{t 'application.title'}}</h1>
     <div class="row center mg-button-group">
-      <button id="start-game-button" class="btn-large waves-effect waves-light purple darken-2" {{action 'goToStartGame'}}>{{t 'index.template.startGame'}}</button>
+      {{#link-to 'game.start' id="start-game-button" class="btn-large waves-effect waves-light purple darken-2" tagName='button'}}{{t 'index.template.startGame'}}{{/link-to}}
     </div>
   </div>
 </div>

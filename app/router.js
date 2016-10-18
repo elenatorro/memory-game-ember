@@ -14,7 +14,7 @@ Router.map(function() {
   this.route('index', {path: '/'});
 
   this.route('game', function() {
-    this.route('start', {path: '/start'});
+    this.route('start');
     this.route('level', {path: '/level/:level_name'});
   });
 });
