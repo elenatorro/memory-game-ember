@@ -1,7 +1,13 @@
 import Ember from 'ember';
 import {Game} from 'memory-game/constants/game';
 
-export default Ember.Component.extend({
+const {
+  Component,
+  observer,
+  run: { later }
+} = Ember;
+
+export default Component.extend({
   classNames: ['mg-game'],
   tagName: 'div',
 
@@ -9,7 +15,7 @@ export default Ember.Component.extend({
   game: null,
   turnedCard: null,
 
-  isFinished: Ember.observer('game.gameCards.@each.isPaired', function() {
+  isFinished: observer('game.gameCards.@each.isPaired', function() {
     this.set('game.isFinished', _isGameFinished.call(this));
   }),
 
@@ -45,7 +51,7 @@ function _isPair(card1, card2) {
 }
 
 function _isGameFinished() {
-  return this.get('game.gameCards').rejectBy('isPaired', true).length === 0;
+  return this.get('game.gameCards').isEvery('isPaired', true);
 }
 
 function _resetGame() {
@@ -59,7 +65,7 @@ function _pairCards(card1, card2) {
 }
 
 function _turnCards(card1, card2) {
-  Ember.run.later(
+  later(
     this, () => {
       card1.set('isTurned', false);
       card2.set('isTurned', false);
