@@ -3,7 +3,6 @@ import {Game} from 'memory-game/constants/game';
 
 const {
   Component,
-  observer,
   run: { later }
 } = Ember;
 
@@ -14,10 +13,6 @@ export default Component.extend({
   // Model
   game: null,
   turnedCard: null,
-
-  isFinished: observer('game.gameCards.@each.isPaired', function() {
-    this.set('game.isFinished', _isGameFinished.call(this));
-  }),
 
   actions: {
     cardHasBeenTurned(card) {
@@ -48,10 +43,6 @@ function _setPairedCardsIfIsPair(card1, card2) {
 
 function _isPair(card1, card2) {
   return card1.get('name') === card2.get('name');
-}
-
-function _isGameFinished() {
-  return this.get('game.gameCards').isEvery('isPaired', true);
 }
 
 function _resetGame() {
