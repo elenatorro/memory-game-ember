@@ -1,10 +1,12 @@
 import Ember from 'ember';
 
-export default Ember.Route.extend({
-  cardService: Ember.inject.service('card'),
+const {
+  Route
+} = Ember;
 
+export default Route.extend({
   beforeModel() {
-    return this.get('cardService').getCards();
+    return this.store.findAll('card');
   },
 
   actions: {

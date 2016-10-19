@@ -1,7 +1,11 @@
 import Ember from 'ember';
 import ENV from 'memory-game/config/environment';
 
-export default Ember.Component.extend({
+const {
+  Component
+} = Ember;
+
+export default Component.extend({
   classNames: ['mg-nav-sidebar', 'deep-orange', 'accent-3'],
   tagName: 'nav',
 

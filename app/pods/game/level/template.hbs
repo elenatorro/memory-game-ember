@@ -1,11 +1,11 @@
 <div class="section center">
-  <h1 class="header center deep-orange-text mg-title">{{t 'game.level.template.level'}}: {{level-name name=model.game.level}}</h1>
+  <h1 class="header center deep-orange-text mg-title">{{t 'game.level.template.level'}}: {{level-name name=model.level}}</h1>
 
   <div class="row center">
-    {{game-board game=model.game}}
+    {{game-board game=model}}
   </div>
 
-  {{#if model.game.isFinished}}
+  {{#if model.isFinished}}
     <p class="mg-game-board-finished-message deep-orange-text">{{t 'game.level.template.wellDoneYouWon'}}</p>
   {{else}}
     <p class="mg-game-board-finished-message deep-orange-text">{{t 'game.level.template.clickOnTheCards'}}</p>

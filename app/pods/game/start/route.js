@@ -1,11 +1,17 @@
 import Ember from 'ember';
-import {Game} from 'memory-game/constants/game';
+import { Game } from 'memory-game/constants/game';
 
-export default Ember.Route.extend({
+const {
+  Route
+} = Ember;
+
+export default Route.extend({
+
   model() {
     return {
       levels: Game.LEVELS
     };
+
   },
 
   actions: {
