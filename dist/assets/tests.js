@@ -314,15 +314,6 @@ define('memory-game/tests/helpers/store.jshint', ['exports'], function (exports)
     assert.ok(true, 'helpers/store.js should pass jshint.');
   });
 });
-define('memory-game/tests/initializers/array.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | initializers/array.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'initializers/array.js should pass jshint.\ninitializers/array.js: line 9, col 120, Empty block.\n\n1 error');
-  });
-});
 define('memory-game/tests/integration/components/change-locale-test', ['exports', 'ember-qunit', 'memory-game/locales/en/translations', 'memory-game/locales/es/translations'], function (exports, _emberQunit, _memoryGameLocalesEnTranslations, _memoryGameLocalesEsTranslations) {
 
   (0, _emberQunit.moduleForComponent)('change-locale', 'Integration | Component | change-locale', {
@@ -1366,13 +1357,13 @@ define('memory-game/tests/unit/utils/utils.jshint', ['exports'], function (expor
     assert.ok(true, 'unit/utils/utils.js should pass jshint.');
   });
 });
-define('memory-game/tests/utils/utils.jshint', ['exports'], function (exports) {
+define('memory-game/tests/utils/array-utils.jshint', ['exports'], function (exports) {
   'use strict';
 
-  QUnit.module('JSHint | utils/utils.js');
+  QUnit.module('JSHint | utils/array-utils.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'utils/utils.js should pass jshint.');
+    assert.ok(true, 'utils/array-utils.js should pass jshint.');
   });
 });
 /* jshint ignore:start */

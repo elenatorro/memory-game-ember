@@ -3,16 +3,16 @@
 	"sourceRoot": "/Users/elenatorro/Projects/memory-game/app/styles",
 	"file": "memory-game.css",
 	"sources": [
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/app.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/colors.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/fonts.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/images.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/text.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/general.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/core/buttons.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/components/nav-sidebar.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/components/game-board.scss",
-		"../../sass_compiler-input_base_path-ugVP4OfO.tmp/0/app/styles/components/game-card.scss"
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/app.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/colors.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/fonts.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/images.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/text.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/general.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/core/buttons.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/components/nav-sidebar.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/components/game-board.scss",
+		"../../sass_compiler-input_base_path-iWHj5Q3f.tmp/0/app/styles/components/game-card.scss"
 	],
 	"sourcesContent": [
 		"@import 'core/colors';\n@import 'core/fonts';\n@import 'core/images';\n@import 'core/text';\n@import 'core/general';\n@import 'core/buttons';\n\n@import 'components/nav-sidebar';\n@import 'components/game-board';\n@import 'components/game-card';\n",

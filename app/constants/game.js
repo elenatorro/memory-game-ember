@@ -2,15 +2,15 @@ export const Game = Object.freeze({
   Level: Object.freeze({
     easy: Object.freeze({
       NAME: 'easy',
-      CARDS_NUMBER: 4
+      CARDS_NUMBER: 2
     }),
     medium: Object.freeze({
       NAME: 'medium',
-      CARDS_NUMBER: 8
+      CARDS_NUMBER: 4
     }),
     difficult: Object.freeze({
       NAME: 'difficult',
-      CARDS_NUMBER: 12
+      CARDS_NUMBER: 16
     })
   }),
   LEVELS: [

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 import { Game } from 'memory-game/constants/game';
+import {ArrayUtils} from 'memory-game/utils/array-utils';
 
 const {
   attr,
@@ -26,9 +27,9 @@ export default Model.extend({
   spawnCards() {
     const cardsNumber = Game.Level[this.get('level')].CARDS_NUMBER;
 
-    const cards = this.store.peekAll('card').toArray().sample(cardsNumber / 2);
+    const cards = ArrayUtils.sample(this.store.peekAll('card'), cardsNumber);
 
-    let gameCards = cards.concat(cards).shuffle().map((card) => {
+    let gameCards = ArrayUtils.shuffle(cards.concat(cards)).map((card) => {
         return this.store.createRecord('gameCard', {
           game: this,
           name: card.get('name'),

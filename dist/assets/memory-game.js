@@ -220,15 +220,15 @@ define('memory-game/constants/game', ['exports'], function (exports) {
     Level: Object.freeze({
       easy: Object.freeze({
         NAME: 'easy',
-        CARDS_NUMBER: 4
+        CARDS_NUMBER: 2
       }),
       medium: Object.freeze({
         NAME: 'medium',
-        CARDS_NUMBER: 8
+        CARDS_NUMBER: 4
       }),
       difficult: Object.freeze({
         NAME: 'difficult',
-        CARDS_NUMBER: 12
+        CARDS_NUMBER: 16
       })
     }),
     LEVELS: ['easy', 'medium', 'difficult'],
@@ -295,29 +295,6 @@ define('memory-game/initializers/app-version', ['exports', 'ember-cli-app-versio
   exports['default'] = {
     name: 'App Version',
     initialize: (0, _emberCliAppVersionInitializerFactory['default'])(_memoryGameConfigEnvironment['default'].APP.name, _memoryGameConfigEnvironment['default'].APP.version)
-  };
-});
-define('memory-game/initializers/array', ['exports'], function (exports) {
-  exports.initialize = initialize;
-
-  function initialize() /* application */{
-    // application.inject('route', 'foo', 'service:foo');
-
-    Array.prototype.sample = function () {
-      var amount = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-
-      return this.shuffle().slice(0, amount);
-    };
-
-    Array.prototype.shuffle = function () {
-      for (var j, x, i = this.length; i; j = Math.floor(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x) {}
-      return this;
-    };
-  }
-
-  exports['default'] = {
-    name: 'array',
-    initialize: initialize
   };
 });
 define('memory-game/initializers/container-debug-adapter', ['exports', 'ember-resolver/container-debug-adapter'], function (exports, _emberResolverContainerDebugAdapter) {
@@ -715,7 +692,7 @@ define('memory-game/models/game-card', ['exports', 'ember-data', 'memory-game/mo
     isPaired: attr('boolean')
   });
 });
-define('memory-game/models/game', ['exports', 'ember', 'ember-data', 'memory-game/constants/game'], function (exports, _ember, _emberData, _memoryGameConstantsGame) {
+define('memory-game/models/game', ['exports', 'ember', 'ember-data', 'memory-game/constants/game', 'memory-game/utils/array-utils'], function (exports, _ember, _emberData, _memoryGameConstantsGame, _memoryGameUtilsArrayUtils) {
   var attr = _emberData['default'].attr;
   var hasMany = _emberData['default'].hasMany;
   var Model = _emberData['default'].Model;
@@ -736,9 +713,9 @@ define('memory-game/models/game', ['exports', 'ember', 'ember-data', 'memory-gam
 
       var cardsNumber = _memoryGameConstantsGame.Game.Level[this.get('level')].CARDS_NUMBER;
 
-      var cards = this.store.peekAll('card').toArray().sample(cardsNumber / 2);
+      var cards = _memoryGameUtilsArrayUtils.ArrayUtils.sample(this.store.peekAll('card'), cardsNumber);
 
-      var gameCards = cards.concat(cards).shuffle().map(function (card) {
+      var gameCards = _memoryGameUtilsArrayUtils.ArrayUtils.shuffle(cards.concat(cards)).map(function (card) {
         return _this.store.createRecord('gameCard', {
           game: _this,
           name: card.get('name'),
@@ -1878,6 +1855,31 @@ define('memory-game/transforms/object', ['exports', 'ember', 'ember-data'], func
 
   });
 });
+define("memory-game/utils/array-utils", ["exports"], function (exports) {
+  var ArrayUtils = {
+    sample: function sample(array) {
+      var amount = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+
+      return array.slice(0, amount);
+    },
+
+    shuffle: function shuffle(array) {
+      var i, j, arrayLength, currentElement;
+
+      arrayLength = array.length;
+
+      for (i = arrayLength; i; i--) {
+        j = Math.floor(Math.random() * i);
+        currentElement = array[i - 1];
+        array[i - 1] = array[j];
+        array[j] = currentElement;
+      }
+
+      return array;
+    }
+  };
+  exports.ArrayUtils = ArrayUtils;
+});
 define('memory-game/utils/i18n/compile-template', ['exports', 'ember-i18n/utils/i18n/compile-template'], function (exports, _emberI18nUtilsI18nCompileTemplate) {
   Object.defineProperty(exports, 'default', {
     enumerable: true,
@@ -1893,53 +1895,6 @@ define('memory-game/utils/i18n/missing-message', ['exports', 'ember-i18n/utils/i
       return _emberI18nUtilsI18nMissingMessage['default'];
     }
   });
-});
-define("memory-game/utils/utils", ["exports"], function (exports) {
-  var Utils = {
-    array: [],
-
-    setArray: function setArray(array) {
-      this.array = array.toArray();
-      return this;
-    },
-
-    getArray: function getArray() {
-      return this.array;
-    },
-
-    getNElement: function getNElement(n) {
-      var i, array, resultArray;
-
-      i = 0;
-      array = this.array;
-      resultArray = [];
-
-      for (i; i < n; i++) {
-        resultArray.push(array[i]);
-      }
-
-      this.array = resultArray;
-      return this;
-    },
-
-    shuffleArray: function shuffleArray() {
-      var array, i, j, arrayLength, currentElement;
-      array = this.array;
-
-      arrayLength = array.length;
-
-      for (i = arrayLength; i; i--) {
-        j = Math.floor(Math.random() * i);
-        currentElement = array[i - 1];
-        array[i - 1] = array[j];
-        array[j] = currentElement;
-      }
-
-      this.array = array;
-      return this;
-    }
-  };
-  exports.Utils = Utils;
 });
 define('memory-game/utils/uuid-generator', ['exports', 'ember-uuid/utils/uuid-generator'], function (exports, _emberUuidUtilsUuidGenerator) {
   Object.defineProperty(exports, 'default', {
@@ -2009,7 +1964,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("memory-game/app")["default"].create({"name":"memory-game","version":"0.0.0+820d03f7"});
+  require("memory-game/app")["default"].create({"name":"memory-game","version":"0.0.0+d15ec2af"});
 }
 
 /* jshint ignore:end */
