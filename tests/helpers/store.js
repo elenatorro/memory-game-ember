@@ -41,10 +41,6 @@ export default function setupStore(options) {
     registry.register('model:' + Ember.String.dasherize(prop), options[prop]);
   }
 
-  registry.register('service:store', DS.Store.extend({
-    adapter: adapter
-  }));
-
   registry.optionsForType('serializer', { singleton: false });
   registry.optionsForType('adapter', { singleton: false });
   registry.register('adapter:-default', DS.Adapter);

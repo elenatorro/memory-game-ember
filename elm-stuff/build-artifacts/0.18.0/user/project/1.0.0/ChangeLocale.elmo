@@ -1,0 +1,113 @@
+var _user$project$ChangeLocale$model = {language: ''};
+var _user$project$ChangeLocale$changeLocale = _elm_lang$core$Native_Platform.outgoingPort(
+	'changeLocale',
+	function (v) {
+		return v;
+	});
+var _user$project$ChangeLocale$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'ChangeEnglish':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{language: 'EN'}),
+					_1: _user$project$ChangeLocale$changeLocale('EN')
+				};
+			case 'ChangeSpanish':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{language: 'ES'}),
+					_1: _user$project$ChangeLocale$changeLocale('ES')
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$ChangeLocale$changeLocale('ES')
+				};
+		}
+	});
+var _user$project$ChangeLocale$Model = function (a) {
+	return {language: a};
+};
+var _user$project$ChangeLocale$init = function (flags) {
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		_user$project$ChangeLocale$Model(flags.language),
+		{ctor: '[]'});
+};
+var _user$project$ChangeLocale$Flags = function (a) {
+	return {language: a};
+};
+var _user$project$ChangeLocale$Default = {ctor: 'Default'};
+var _user$project$ChangeLocale$ChangeSpanish = {ctor: 'ChangeSpanish'};
+var _user$project$ChangeLocale$ChangeEnglish = {ctor: 'ChangeEnglish'};
+var _user$project$ChangeLocale$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$ul,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('mg-change-locale-buttons'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_user$project$ChangeLocale$ChangeEnglish),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('btn btn-small waves-effect waves-light purple darken-2 mg-level-button'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('English'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$ChangeLocale$ChangeSpanish),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('btn btn-small waves-effect waves-light purple darken-2 mg-level-button'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Spanish'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$ChangeLocale$main = _elm_lang$html$Html$programWithFlags(
+	{
+		init: _user$project$ChangeLocale$init,
+		view: _user$project$ChangeLocale$view,
+		update: _user$project$ChangeLocale$update,
+		subscriptions: function (_p1) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (language) {
+			return _elm_lang$core$Json_Decode$succeed(
+				{language: language});
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'language', _elm_lang$core$Json_Decode$string)));

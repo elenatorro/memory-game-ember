@@ -96,7 +96,7 @@ export default {
       template: {
         easy:      'Easy',
         medium:    'Medium',
-        difficult: 'Difficult'
+        hard: 'Hard'
       }
     }
   }

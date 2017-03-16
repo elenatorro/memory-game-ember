@@ -18,6 +18,15 @@ define('memory-game/tests/app.jshint', ['exports'], function (exports) {
     assert.ok(true, 'app.js should pass jshint.');
   });
 });
+define('memory-game/tests/components/elm-component.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/elm-component.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/elm-component.js should pass jshint.');
+  });
+});
 define('memory-game/tests/constants/api.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -104,9 +113,9 @@ define('memory-game/tests/helpers/ember-i18n/test-helpers', ['exports', 'ember']
   });
 
   var assertTranslation = (function () {
-    if (typeof QUnit !== 'undefined' && typeof ok === 'function') {
+    if (typeof QUnit !== 'undefined' && typeof QUnit.assert.ok === 'function') {
       return function (element, key, text) {
-        ok(find(element + ':contains(' + text + ')').length, 'Found translation key ' + key + ' in ' + element);
+        QUnit.assert.ok(find(element + ':contains(' + text + ')').length, 'Found translation key ' + key + ' in ' + element);
       };
     } else if (typeof expect === 'function') {
       return function (element, key, text) {
@@ -175,18 +184,10 @@ define('memory-game/tests/helpers/resolver.jshint', ['exports'], function (expor
     assert.ok(true, 'helpers/resolver.js should pass jshint.');
   });
 });
-define('memory-game/tests/helpers/setup-games', ['exports', 'memory-game/services/store', 'memory-game/services/card', 'ember-i18n/helper'], function (exports, _memoryGameServicesStore, _memoryGameServicesCard, _emberI18nHelper) {
+define('memory-game/tests/helpers/setup-games', ['exports', 'ember-i18n/helper'], function (exports, _emberI18nHelper) {
 
   function setupGames(appInstance) {
     try {
-      appInstance.registry.register('service:store', _memoryGameServicesStore['default'], { instantiate: true });
-      appInstance.container.registry.injection('route:application', 'storeService', 'service:store');
-      appInstance.container.lookup('service:store');
-
-      appInstance.registry.register('service:card', _memoryGameServicesCard['default'], { instantiate: true });
-      appInstance.container.registry.injection('route:application', 'cardService', 'service:card');
-      appInstance.container.lookup('service:card');
-
       appInstance.container.lookup('service:i18n').set('locale', 'en');
       appInstance.registry.register('helper:t', _emberI18nHelper['default']);
     } catch (reason) {
@@ -274,10 +275,6 @@ define('memory-game/tests/helpers/store', ['exports', 'ember', 'ember-data', 'me
     for (var prop in options) {
       registry.register('model:' + _ember['default'].String.dasherize(prop), options[prop]);
     }
-
-    registry.register('service:store', _emberData['default'].Store.extend({
-      adapter: adapter
-    }));
 
     registry.optionsForType('serializer', { singleton: false });
     registry.optionsForType('adapter', { singleton: false });
@@ -394,7 +391,7 @@ define('memory-game/tests/integration/components/change-locale-test.jshint', ['e
 });
 define('memory-game/tests/integration/components/game-board-test', ['exports', 'ember', 'ember-qunit', 'memory-game/constants/game', 'memory-game/tests/helpers/start-app', 'memory-game/tests/helpers/setup-games'], function (exports, _ember, _emberQunit, _memoryGameConstantsGame, _memoryGameTestsHelpersStartApp, _memoryGameTestsHelpersSetupGames) {
 
-  var storeService, cardService, app, appInstance;
+  var app, appInstance;
   (0, _emberQunit.moduleForComponent)('game-board', 'Integration | Component | game-board', {
     integration: true,
 
@@ -402,13 +399,6 @@ define('memory-game/tests/integration/components/game-board-test', ['exports', '
       app = (0, _memoryGameTestsHelpersStartApp['default'])();
       appInstance = app.buildInstance();
       (0, _memoryGameTestsHelpersSetupGames['default'])(this);
-
-      cardService = this.container.lookup('service:card');
-      storeService = this.container.lookup('service:store');
-
-      cardService.getCards().then(function () {
-        return storeService.initGames();
-      });
     },
 
     afterEach: function afterEach() {
@@ -416,279 +406,124 @@ define('memory-game/tests/integration/components/game-board-test', ['exports', '
     }
   });
 
-  (0, _emberQunit.test)('it should be able display the different game levels', function (assert) {
-    var _this = this;
-
-    var done, _gameBoard, _gameCards;
-
-    done = assert.async(3);
-
-    _memoryGameConstantsGame.Game.LEVELS.forEach(function (level) {
-      storeService.getGame(level).then(function (game) {
-        _this.setProperties({ game: game });
-        _this.render(_ember['default'].HTMLBars.template((function () {
-          return {
-            meta: {
-              'revision': 'Ember@2.8.2',
-              'loc': {
-                'source': null,
-                'start': {
-                  'line': 1,
-                  'column': 0
-                },
-                'end': {
-                  'line': 1,
-                  'column': 24
-                }
-              }
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createComment('');
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var morphs = new Array(1);
-              morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-              dom.insertBoundary(fragment, 0);
-              dom.insertBoundary(fragment, null);
-              return morphs;
-            },
-            statements: [['inline', 'game-board', [], ['game', ['subexpr', '@mut', [['get', 'game', ['loc', [null, [1, 18], [1, 22]]], 0, 0, 0, 0]], [], [], 0, 0]], ['loc', [null, [1, 0], [1, 24]]], 0, 0]],
-            locals: [],
-            templates: []
-          };
-        })()));
-
-        _gameBoard = _this.$('.mg-game').eq(0);
-        assert.ok(_gameBoard);
-
-        _gameCards = _this.$('.mg-game-card-flip-container');
-        assert.ok(_gameCards);
-        assert.equal(_gameCards.length, _memoryGameConstantsGame.Game.Level[level].CARDS_NUMBER * 2, 'it should have the level ' + level + ' with ' + _memoryGameConstantsGame.Game.Level[level].CARDS_NUMBER * 2 + ' cards');
-        done();
-      });
-    });
-  });
-
-  (0, _emberQunit.test)('it should be able to set a pair if it is a pair', function (assert) {
-    var _this2 = this;
-
-    var done, gameCards, turnedCard, _gameCards;
-
-    done = assert.async();
-
-    storeService.getGame(_memoryGameConstantsGame.Game.Level.easy.NAME).then(function (game) {
-      gameCards = game.get('gameCards');
-
-      _this2.setProperties({ game: game, turnedCard: turnedCard });
-
-      _this2.render(_ember['default'].HTMLBars.template((function () {
-        return {
-          meta: {
-            'revision': 'Ember@2.8.2',
-            'loc': {
-              'source': null,
-              'start': {
-                'line': 1,
-                'column': 0
-              },
-              'end': {
-                'line': 1,
-                'column': 46
-              }
-            }
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createComment('');
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var morphs = new Array(1);
-            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-            dom.insertBoundary(fragment, 0);
-            dom.insertBoundary(fragment, null);
-            return morphs;
-          },
-          statements: [['inline', 'game-board', [], ['game', ['subexpr', '@mut', [['get', 'game', ['loc', [null, [1, 18], [1, 22]]], 0, 0, 0, 0]], [], [], 0, 0], 'turnedCard', ['subexpr', '@mut', [['get', 'turnedCard', ['loc', [null, [1, 34], [1, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ['loc', [null, [1, 0], [1, 46]]], 0, 0]],
-          locals: [],
-          templates: []
-        };
-      })()));
-
-      _gameCards = _this2.$('.mg-game-card-flipper');
-
-      assert.notOk(_this2.get('turnedCard'), 'it should not have turned card');
-
-      _gameCards.eq(0).click();
-      assert.ok(_this2.get('turnedCard'), 'it should have saved the turned card');
-      assert.ok(_this2.get('game.gameCards').objectAt(0).get('isTurned'));
-
-      _gameCards.eq(1).click();
-      assert.ok(_this2.get('game.gameCards').objectAt(1).get('isTurned'));
-
-      _ember['default'].run.later(_this2, function () {
-        assert.ok(_this2.get('game.gameCards').objectAt(0).get('isTurned'));
-        assert.ok(_this2.get('game.gameCards').objectAt(1).get('isTurned'));
-        assert.ok(_this2.get('game.gameCards').objectAt(0).get('isPaired'));
-        assert.ok(_this2.get('game.gameCards').objectAt(1).get('isPaired'));
-        done();
-      }, _memoryGameConstantsGame.Game.TURN_ANIMATION_DELAY_MILISECONDS);
-    });
-  });
-
-  (0, _emberQunit.test)('it should be able to reject a pair if it is not a pair', function (assert) {
-    var _this3 = this;
-
-    var done, gameCards, turnedCard, _gameCards;
-
-    done = assert.async();
-
-    storeService.getGame(_memoryGameConstantsGame.Game.Level.easy.NAME).then(function (game) {
-      gameCards = game.get('gameCards');
-
-      _this3.setProperties({ game: game, turnedCard: turnedCard });
-
-      _this3.render(_ember['default'].HTMLBars.template((function () {
-        return {
-          meta: {
-            'revision': 'Ember@2.8.2',
-            'loc': {
-              'source': null,
-              'start': {
-                'line': 1,
-                'column': 0
-              },
-              'end': {
-                'line': 1,
-                'column': 46
-              }
-            }
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createComment('');
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var morphs = new Array(1);
-            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-            dom.insertBoundary(fragment, 0);
-            dom.insertBoundary(fragment, null);
-            return morphs;
-          },
-          statements: [['inline', 'game-board', [], ['game', ['subexpr', '@mut', [['get', 'game', ['loc', [null, [1, 18], [1, 22]]], 0, 0, 0, 0]], [], [], 0, 0], 'turnedCard', ['subexpr', '@mut', [['get', 'turnedCard', ['loc', [null, [1, 34], [1, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ['loc', [null, [1, 0], [1, 46]]], 0, 0]],
-          locals: [],
-          templates: []
-        };
-      })()));
-
-      _gameCards = _this3.$('.mg-game-card-flipper');
-
-      assert.notOk(_this3.get('turnedCard'), 'it should not have turned card');
-
-      _gameCards.eq(0).click();
-      assert.ok(_this3.get('turnedCard'), 'it should have saved the turned card');
-      assert.ok(_this3.get('game.gameCards').objectAt(0).get('isTurned'));
-
-      _gameCards.eq(2).click();
-      assert.ok(_this3.get('game.gameCards').objectAt(2).get('isTurned'));
-
-      _ember['default'].run.later(_this3, function () {
-        assert.notOk(_this3.get('game.gameCards').objectAt(0).get('isTurned'));
-        assert.notOk(_this3.get('game.gameCards').objectAt(2).get('isTurned'));
-        done();
-      }, _memoryGameConstantsGame.Game.TURN_ANIMATION_DELAY_MILISECONDS);
-    });
-  });
-
-  (0, _emberQunit.test)('it should be able finish a game', function (assert) {
-    var _this4 = this;
-
-    var done, gameCards, turnedCard, _gameCards, cardHasBeenTurned;
-
-    done = assert.async();
-    storeService.getGame(_memoryGameConstantsGame.Game.Level.easy.NAME).then(function (game) {
-      gameCards = game.get('gameCards');
-
-      _this4.setProperties({ game: game, turnedCard: turnedCard, cardHasBeenTurned: cardHasBeenTurned });
-
-      _this4.render(_ember['default'].HTMLBars.template((function () {
-        return {
-          meta: {
-            'revision': 'Ember@2.8.2',
-            'loc': {
-              'source': null,
-              'start': {
-                'line': 1,
-                'column': 0
-              },
-              'end': {
-                'line': 1,
-                'column': 46
-              }
-            }
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createComment('');
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var morphs = new Array(1);
-            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-            dom.insertBoundary(fragment, 0);
-            dom.insertBoundary(fragment, null);
-            return morphs;
-          },
-          statements: [['inline', 'game-board', [], ['game', ['subexpr', '@mut', [['get', 'game', ['loc', [null, [1, 18], [1, 22]]], 0, 0, 0, 0]], [], [], 0, 0], 'turnedCard', ['subexpr', '@mut', [['get', 'turnedCard', ['loc', [null, [1, 34], [1, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ['loc', [null, [1, 0], [1, 46]]], 0, 0]],
-          locals: [],
-          templates: []
-        };
-      })()));
-
-      _gameCards = _this4.$('.mg-game-card-flipper');
-
-      assert.notOk(_this4.get('turnedCard'), 'it should not have turned card');
-
-      _gameCards.eq(0).click();
-      assert.ok(_this4.get('turnedCard'), 'it should have saved the turned card');
-      assert.ok(_this4.get('game.gameCards').objectAt(0).get('isTurned'));
-
-      _gameCards.eq(1).click();
-      assert.ok(_this4.get('game.gameCards').objectAt(1).get('isTurned'));
-      assert.ok(_this4.get('game.gameCards').objectAt(0).get('isPaired'));
-      assert.ok(_this4.get('game.gameCards').objectAt(1).get('isPaired'));
-
-      _gameCards.eq(2).click();
-      _gameCards.eq(3).click();
-      assert.ok(_this4.get('game.gameCards').objectAt(2).get('isPaired'));
-      assert.ok(_this4.get('game.gameCards').objectAt(3).get('isPaired'));
-      assert.ok(_this4.get('game.isFinished'), 'it should be finished if all the cards are paired');
-      done();
-    });
-  });
+  /* FIXME */
+  // test('it should be able display the different game levels', function(assert) {
+  //   var done, _gameBoard, _gameCards;
+  //
+  //   done = assert.async(3);
+  //
+  //   this.setProperties({game});
+  //   this.render(hbs`{{game-board game=game}}`);
+  //
+  //   _gameBoard = this.$('.mg-game').eq(0);
+  //   assert.ok(_gameBoard);
+  //
+  //   _gameCards = this.$('.mg-game-card-flip-container');
+  //   assert.ok(_gameCards);
+  //   assert.equal(_gameCards.length, Game.Level[level].CARDS_NUMBER * 2, `it should have the level ${level} with ${Game.Level[level].CARDS_NUMBER * 2} cards`);
+  //   done();
+  // });
+  //
+  // test('it should be able to set a pair if it is a pair', function(assert) {
+  //   var done, gameCards, turnedCard, _gameCards;
+  //
+  //   done = assert.async();
+  //
+  //   storeService.getGame(Game.Level.easy.NAME)
+  //     .then((game) => {
+  //       gameCards = game.get('gameCards');
+  //
+  //       this.setProperties({game, turnedCard});
+  //
+  //       this.render(hbs`{{game-board game=game turnedCard=turnedCard}}`);
+  //
+  //       _gameCards = this.$('.mg-game-card-flipper');
+  //
+  //       assert.notOk(this.get('turnedCard'), 'it should not have turned card');
+  //
+  //       _gameCards.eq(0).click();
+  //       assert.ok(this.get('turnedCard'), 'it should have saved the turned card');
+  //       assert.ok(this.get('game.gameCards').objectAt(0).get('isTurned'));
+  //
+  //       _gameCards.eq(1).click();
+  //       assert.ok(this.get('game.gameCards').objectAt(1).get('isTurned'));
+  //
+  //       Ember.run.later(this, () => {
+  //         assert.ok(this.get('game.gameCards').objectAt(0).get('isTurned'));
+  //         assert.ok(this.get('game.gameCards').objectAt(1).get('isTurned'));
+  //         assert.ok(this.get('game.gameCards').objectAt(0).get('isPaired'));
+  //         assert.ok(this.get('game.gameCards').objectAt(1).get('isPaired'));
+  //         done();
+  //
+  //       }, Game.TURN_ANIMATION_DELAY_MILISECONDS);
+  //     });
+  // });
+  //
+  // test('it should be able to reject a pair if it is not a pair', function(assert) {
+  //   var done, gameCards, turnedCard, _gameCards;
+  //
+  //   done = assert.async();
+  //
+  //   storeService.getGame(Game.Level.easy.NAME)
+  //     .then((game) => {
+  //       gameCards = game.get('gameCards');
+  //
+  //       this.setProperties({game, turnedCard});
+  //
+  //       this.render(hbs`{{game-board game=game turnedCard=turnedCard}}`);
+  //
+  //       _gameCards = this.$('.mg-game-card-flipper');
+  //
+  //       assert.notOk(this.get('turnedCard'), 'it should not have turned card');
+  //
+  //       _gameCards.eq(0).click();
+  //       assert.ok(this.get('turnedCard'), 'it should have saved the turned card');
+  //       assert.ok(this.get('game.gameCards').objectAt(0).get('isTurned'));
+  //
+  //       _gameCards.eq(2).click();
+  //       assert.ok(this.get('game.gameCards').objectAt(2).get('isTurned'));
+  //
+  //       Ember.run.later(this, () => {
+  //         assert.notOk(this.get('game.gameCards').objectAt(0).get('isTurned'));
+  //         assert.notOk(this.get('game.gameCards').objectAt(2).get('isTurned'));
+  //         done();
+  //       }, Game.TURN_ANIMATION_DELAY_MILISECONDS);
+  //     });
+  // });
+  //
+  // test('it should be able finish a game', function(assert) {
+  //   var done, gameCards, turnedCard, _gameCards, cardHasBeenTurned;
+  //
+  //   done = assert.async();
+  //   storeService.getGame(Game.Level.easy.NAME)
+  //     .then((game) => {
+  //       gameCards = game.get('gameCards');
+  //
+  //       this.setProperties({game, turnedCard, cardHasBeenTurned});
+  //
+  //       this.render(hbs`{{game-board game=game turnedCard=turnedCard}}`);
+  //
+  //       _gameCards = this.$('.mg-game-card-flipper');
+  //
+  //       assert.notOk(this.get('turnedCard'), 'it should not have turned card');
+  //
+  //       _gameCards.eq(0).click();
+  //       assert.ok(this.get('turnedCard'), 'it should have saved the turned card');
+  //       assert.ok(this.get('game.gameCards').objectAt(0).get('isTurned'));
+  //
+  //       _gameCards.eq(1).click();
+  //       assert.ok(this.get('game.gameCards').objectAt(1).get('isTurned'));
+  //       assert.ok(this.get('game.gameCards').objectAt(0).get('isPaired'));
+  //       assert.ok(this.get('game.gameCards').objectAt(1).get('isPaired'));
+  //
+  //       _gameCards.eq(2).click();
+  //       _gameCards.eq(3).click();
+  //       assert.ok(this.get('game.gameCards').objectAt(2).get('isPaired'));
+  //       assert.ok(this.get('game.gameCards').objectAt(3).get('isPaired'));
+  //       assert.ok(this.get('game.isFinished'), 'it should be finished if all the cards are paired');
+  //       done();
+  //     });
+  // });
 });
 define('memory-game/tests/integration/components/game-board-test.jshint', ['exports'], function (exports) {
   'use strict';
@@ -696,12 +531,12 @@ define('memory-game/tests/integration/components/game-board-test.jshint', ['expo
   QUnit.module('JSHint | integration/components/game-board-test.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'integration/components/game-board-test.js should pass jshint.');
+    assert.ok(false, 'integration/components/game-board-test.js should pass jshint.\nintegration/components/game-board-test.js: line 2, col 29, \'test\' is defined but never used.\nintegration/components/game-board-test.js: line 3, col 8, \'hbs\' is defined but never used.\nintegration/components/game-board-test.js: line 5, col 9, \'Game\' is defined but never used.\n\n3 errors');
   });
 });
-define('memory-game/tests/integration/components/game-card-test', ['exports', 'ember', 'ember-qunit', 'memory-game/tests/helpers/start-app', 'memory-game/tests/helpers/setup-games', 'memory-game/constants/store', 'memory-game/constants/game', 'memory-game/constants/cards', 'memory-game/locales/en/translations', 'memory-game/locales/es/translations'], function (exports, _ember, _emberQunit, _memoryGameTestsHelpersStartApp, _memoryGameTestsHelpersSetupGames, _memoryGameConstantsStore, _memoryGameConstantsGame, _memoryGameConstantsCards, _memoryGameLocalesEnTranslations, _memoryGameLocalesEsTranslations) {
+define('memory-game/tests/integration/components/game-card-test', ['exports', 'ember', 'ember-qunit', 'memory-game/tests/helpers/start-app', 'memory-game/tests/helpers/setup-games', 'memory-game/constants/game', 'memory-game/constants/cards', 'memory-game/locales/en/translations', 'memory-game/locales/es/translations'], function (exports, _ember, _emberQunit, _memoryGameTestsHelpersStartApp, _memoryGameTestsHelpersSetupGames, _memoryGameConstantsGame, _memoryGameConstantsCards, _memoryGameLocalesEnTranslations, _memoryGameLocalesEsTranslations) {
 
-  var storeService, app, appInstance;
+  var app, appInstance;
   (0, _emberQunit.moduleForComponent)('game-card', 'Integration | Component | game-card', {
     integration: true,
 
@@ -709,9 +544,6 @@ define('memory-game/tests/integration/components/game-card-test', ['exports', 'e
       app = (0, _memoryGameTestsHelpersStartApp['default'])();
       appInstance = app.buildInstance();
       (0, _memoryGameTestsHelpersSetupGames['default'])(this);
-
-      storeService = this.container.lookup('service:store');
-      storeService.initGames();
     },
 
     afterEach: function afterEach() {
@@ -734,9 +566,6 @@ define('memory-game/tests/integration/components/game-card-test', ['exports', 'e
         name: name,
         meta: {}
       });
-
-      storeService.setGameCard(game, card);
-      card = storeService.peekAll(_memoryGameConstantsStore.Model.GAME_CARD).objectAt(0);
 
       _this.setProperties({ card: card });
       _this.render(_ember['default'].HTMLBars.template((function () {
@@ -1305,46 +1134,6 @@ define('memory-game/tests/unit/routes/game-start-test.jshint', ['exports'], func
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/game-start-test.js should pass jshint.');
-  });
-});
-define("memory-game/tests/unit/services/api-test", ["exports"], function (exports) {});
-define('memory-game/tests/unit/services/api-test.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | unit/services/api-test.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'unit/services/api-test.js should pass jshint.');
-  });
-});
-define("memory-game/tests/unit/services/card-test", ["exports"], function (exports) {});
-define('memory-game/tests/unit/services/card-test.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | unit/services/card-test.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'unit/services/card-test.js should pass jshint.');
-  });
-});
-define("memory-game/tests/unit/services/route-test", ["exports"], function (exports) {});
-define('memory-game/tests/unit/services/route-test.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | unit/services/route-test.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'unit/services/route-test.js should pass jshint.');
-  });
-});
-define("memory-game/tests/unit/services/store-test", ["exports"], function (exports) {});
-define('memory-game/tests/unit/services/store-test.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | unit/services/store-test.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'unit/services/store-test.js should pass jshint.');
   });
 });
 define("memory-game/tests/unit/utils/utils", ["exports"], function (exports) {});

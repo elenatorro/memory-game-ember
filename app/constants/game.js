@@ -8,15 +8,15 @@ export const Game = Object.freeze({
       NAME: 'medium',
       CARDS_NUMBER: 4
     }),
-    difficult: Object.freeze({
-      NAME: 'difficult',
-      CARDS_NUMBER: 16
+    hard: Object.freeze({
+      NAME: 'hard',
+      CARDS_NUMBER: 8
     })
   }),
   LEVELS: [
     'easy',
     'medium',
-    'difficult'
+    'hard'
   ],
   TURN_ANIMATION_DELAY_MILISECONDS: 1000
 });

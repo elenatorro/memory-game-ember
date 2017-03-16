@@ -1,15 +1,22 @@
 import Ember from 'ember';
-import {Locales} from 'memory-game/constants/locales';
+import Elm from 'memory-game/elm-modules';
 
 export default Ember.Component.extend({
-  i18nService: Ember.inject.service('i18n'),
-  tagName: 'ul',
+  i18n: Ember.inject.service(),
+
+  language: 'ES',
+
+  setupElm: Ember.on('init', function() {
+    this.set('Elm', Elm);
+  }),
+
+  changeLocale(locale) {
+    this.set('i18n.locale', locale);
+  },
 
   actions: {
-    changeTo(locale) {
-      if (!!Locales[locale]) {
-        this.set('i18nService.locale', locale);
-      }
+    changeLocale(ports) {
+      ports.changeLocale.subscribe(this.get('changeLocale').bind(this));
     }
   }
 });

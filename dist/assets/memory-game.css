@@ -233,9 +233,7 @@ nav.mg-nav-sidebar ul a.btn {
   .mg-game-card-flip-container.mg-game-card-flip-container-medium {
     width: 120px;
     height: 120px; }
-  .mg-game-card-flip-container.mg-game-card-flip-container-difficult {
+  .mg-game-card-flip-container.mg-game-card-flip-container-hard {
     width: 80px;
     height: 80px;
     font-size: 2vw; } }
-
-/*# sourceMappingURL=memory-game.css.map */

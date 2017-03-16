@@ -1,0 +1,40 @@
+var _user$project$WordIllustrationLetter$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('word-illustration__letter-char'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(model.letter),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$WordIllustrationLetter$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$WordIllustrationLetter$update = F2(
+	function (msg, model) {
+		return A2(
+			_elm_lang$core$Platform_Cmd_ops['!'],
+			model,
+			{ctor: '[]'});
+	});
+var _user$project$WordIllustrationLetter$init = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
+var _user$project$WordIllustrationLetter$main = _elm_lang$html$Html$programWithFlags(
+	{init: _user$project$WordIllustrationLetter$init, view: _user$project$WordIllustrationLetter$view, update: _user$project$WordIllustrationLetter$update, subscriptions: _user$project$WordIllustrationLetter$subscriptions})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (letter) {
+			return _elm_lang$core$Json_Decode$succeed(
+				{letter: letter});
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'letter', _elm_lang$core$Json_Decode$string)));
+var _user$project$WordIllustrationLetter$Model = function (a) {
+	return {letter: a};
+};
+var _user$project$WordIllustrationLetter$Noop = {ctor: 'Noop'};

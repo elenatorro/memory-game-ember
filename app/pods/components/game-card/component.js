@@ -13,7 +13,7 @@ export default Component.extend({
   classNameBindings: [
     'isEasy:mg-game-card-flip-container-easy',
     'isMedium:mg-game-card-flip-container-medium',
-    'isDifficult:mg-game-card-flip-container-difficult'
+    'isHard:mg-game-card-flip-container-hard'
   ],
   classNames: ['mg-game-card-flip-container'],
   tagName: 'div',
@@ -29,9 +29,9 @@ export default Component.extend({
              this.get('isGameLocked'));
   }),
 
-  isEasy:      equal('card.game.level', Game.Level.easy.NAME),
-  isMedium:    equal('card.game.level', Game.Level.medium.NAME),
-  isDifficult: equal('card.game.level', Game.Level.difficult.NAME),
+  isEasy: equal('card.game.level', Game.Level.easy.NAME),
+  isMedium: equal('card.game.level', Game.Level.medium.NAME),
+  isHard: equal('card.game.level', Game.Level.hard.NAME),
 
   cardNameLocale: computed('card.name', function() {
     return `components.gameCard.template.cards.${this.get('card.name')}`;

@@ -5,13 +5,12 @@ import hbs from 'htmlbars-inline-precompile';
 import startApp from 'memory-game/tests/helpers/start-app';
 import setupGames from 'memory-game/tests/helpers/setup-games';
 
-import {Model} from 'memory-game/constants/store';
-import {Game} from 'memory-game/constants/game';
-import {Card} from 'memory-game/constants/cards';
+import { Game } from 'memory-game/constants/game';
+import { Card } from 'memory-game/constants/cards';
 import localesEN from 'memory-game/locales/en/translations';
 import localesES from 'memory-game/locales/es/translations';
 
-var storeService, app, appInstance;
+var app, appInstance;
 moduleForComponent('game-card', 'Integration | Component | game-card', {
   integration: true,
 
@@ -19,9 +18,6 @@ moduleForComponent('game-card', 'Integration | Component | game-card', {
     app = startApp();
     appInstance = app.buildInstance();
     setupGames(this);
-
-    storeService = this.container.lookup('service:store');
-    storeService.initGames();
   },
 
   afterEach() {
@@ -42,9 +38,6 @@ test('it should be able display a game card', function(assert) {
       name: name,
       meta: {}
     });
-
-    storeService.setGameCard(game, card);
-    card = storeService.peekAll(Model.GAME_CARD).objectAt(0);
 
     this.setProperties({card});
     this.render(hbs`{{game-card card=card}}{{change-locale}}`);

@@ -64193,6 +64193,107 @@ requireModule("ember");
   generateModule('rsvp', { 'default': Ember.RSVP });
 })();
 
+;/* globals Ember, Proxy, define */
+(function() {
+  'use strict';
+
+  var HAS_NATIVE_PROXY = typeof Proxy === 'function';
+
+  var SAFE_LOOKUP_FACTORY_METHOD = '_lookupFactory';
+  function factoryFor(fullName) {
+    var factory = this[SAFE_LOOKUP_FACTORY_METHOD](fullName);
+
+    if (!factory) {
+      return;
+    }
+
+    var FactoryManager = {
+      class: factory,
+      create: function() {
+        return this.class.create.apply(this.class, arguments);
+      }
+    };
+
+    Ember.runInDebug(function() {
+      if (HAS_NATIVE_PROXY) {
+        var validator = {
+          get: function(obj, prop) {
+            if (prop !== 'class' && prop !== 'create') {
+              throw new Error('You attempted to access "' + prop + '" on a factory manager created by container#factoryFor. "' + prop + '" is not a member of a factory manager.');
+            }
+
+            return obj[prop];
+          },
+          set: function(obj, prop, value) {
+            throw new Error('You attempted to set "' + prop + '" on a factory manager created by container#factoryFor. A factory manager is a read-only construct.');
+          }
+        };
+
+        // Note:
+        // We have to proxy access to the manager here so that private property
+        // access doesn't cause the above errors to occur.
+        var m = FactoryManager;
+        var proxiedManager = {
+          class: m.class,
+          create: function(props) {
+            return m.create(props);
+          }
+        };
+
+        FactoryManager = new Proxy(proxiedManager, validator);
+      }
+    });
+
+    return FactoryManager;
+  }
+
+  if (typeof define === 'function') {
+    define('ember-factory-for-polyfill/vendor/ember-factory-for-polyfill/index', ['exports'], function(exports) {
+      exports._factoryFor = factoryFor;
+
+      exports._updateSafeLookupFactoryMethod = function(methodName) {
+        SAFE_LOOKUP_FACTORY_METHOD = methodName;
+      };
+
+      return exports;
+    });
+  }
+
+  var FactoryForMixin = Ember.Mixin.create({
+    factoryFor: factoryFor
+  });
+
+  // added in Ember 2.8
+  if (Ember.ApplicationInstance) {
+    // augment the main application's "owner"
+    Ember.ApplicationInstance.reopen(FactoryForMixin);
+  } else {
+    // in Ember < 2.8 the Ember.ApplicationInstance is not
+    // exposed globally, so we have to monkey patch the
+    // `Ember.Application#buildInstance` method to ensure
+    // that the built instance has a `factoryFor` method
+    // this gives us support for Ember 2.3 - 2.7
+    Ember.Application.reopen({
+      buildInstance: function(_options) {
+        var options = _options || {};
+        options.factoryFor = factoryFor;
+
+        var instance = this._super(options);
+
+        return instance;
+      }
+    });
+  }
+
+  // added in Ember 2.3
+  if (Ember._ContainerProxyMixin) {
+    // supports ember-test-helpers's build-registry (and other tooling that use
+    // Ember._ContainerProxyMixin to emulate an "owner")
+    var ContainerProxyMixinWithFactoryFor = Ember.Mixin.create(Ember._ContainerProxyMixin, FactoryForMixin);
+    Ember._ContainerProxyMixin = ContainerProxyMixinWithFactoryFor;
+  }
+})();
+
 ;/* globals define */
 define('ember/load-initializers', ['exports', 'ember-load-initializers', 'ember'], function(exports, loadInitializers, Ember) {
   Ember['default'].deprecate(
@@ -90484,181 +90585,80 @@ define("ember-data/version", ["exports"], function (exports) {
 
   exports["default"] = "2.8.1";
 });
-define('ember-getowner-polyfill/fake-owner', ['exports', 'ember'], function (exports, _ember) {
+define('ember-elm/components/elm-component', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
 
-  var _createClass = (function () {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ('value' in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-      }
-    }return function (Constructor, protoProps, staticProps) {
-      if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-    };
-  })();
+  exports['default'] = _ember['default'].Component.extend({
+    layout: _ember['default'].HTMLBars.template((function () {
+      return {
+        meta: {
+          'revision': 'Ember@2.8.2',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 1,
+              'column': 9
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [['content', 'yield', ['loc', [null, [1, 0], [1, 9]]], 0, 0, 0, 0]],
+        locals: [],
+        templates: []
+      };
+    })()),
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError('Cannot call a class as a function');
+    // Elm module
+    src: undefined,
+
+    // anything you want to pass to the Elm module
+    flags: undefined,
+
+    // function that is passed the Elm module's ports
+    setup: function setup(ports) {},
+
+    didReceiveAttrs: function didReceiveAttrs() {
+      if (!this.src) throw new Error('elm-component missing src object');
+    },
+
+    didInsertElement: function didInsertElement() {
+      var _src$embed = this.src.embed(this.element, this.flags);
+
+      var ports = _src$embed.ports;
+
+      this.setup(ports);
     }
-  }
-
-  var CONTAINER = '__' + new Date() + '_container';
-  var REGISTRY = '__' + new Date() + '_registry';
-
-  var FakeOwner = (function () {
-    function FakeOwner(object) {
-      _classCallCheck(this, FakeOwner);
-
-      this[CONTAINER] = object.container;
-
-      if (_ember['default'].Registry) {
-        // object.container._registry is used by 1.11
-        this[REGISTRY] = object.container.registry || object.container._registry;
-      } else {
-        // Ember < 1.12
-        this[REGISTRY] = object.container;
-      }
-    }
-
-    // ContainerProxyMixin methods
-    //
-    // => http://emberjs.com/api/classes/ContainerProxyMixin.html
-    //
-
-    _createClass(FakeOwner, [{
-      key: 'lookup',
-      value: function lookup() {
-        var _CONTAINER;
-
-        return (_CONTAINER = this[CONTAINER]).lookup.apply(_CONTAINER, arguments);
-      }
-    }, {
-      key: '_lookupFactory',
-      value: function _lookupFactory() {
-        var _CONTAINER2;
-
-        return (_CONTAINER2 = this[CONTAINER]).lookupFactory.apply(_CONTAINER2, arguments);
-      }
-    }, {
-      key: 'ownerInjection',
-      value: function ownerInjection() {
-        return {
-          container: this[CONTAINER]
-        };
-      }
-
-      // RegistryProxyMixin methods
-      //
-      // => http://emberjs.com/api/classes/RegistryProxyMixin.html
-      //
-    }, {
-      key: 'hasRegistration',
-      value: function hasRegistration() {
-        var _REGISTRY;
-
-        return (_REGISTRY = this[REGISTRY]).has.apply(_REGISTRY, arguments);
-      }
-    }, {
-      key: 'inject',
-      value: function inject() {
-        var _REGISTRY2;
-
-        return (_REGISTRY2 = this[REGISTRY]).injection.apply(_REGISTRY2, arguments);
-      }
-    }, {
-      key: 'register',
-      value: function register() {
-        var _REGISTRY3;
-
-        return (_REGISTRY3 = this[REGISTRY]).register.apply(_REGISTRY3, arguments);
-      }
-    }, {
-      key: 'registerOption',
-      value: function registerOption() {
-        var _REGISTRY4;
-
-        return (_REGISTRY4 = this[REGISTRY]).option.apply(_REGISTRY4, arguments);
-      }
-    }, {
-      key: 'registerOptions',
-      value: function registerOptions() {
-        var _REGISTRY5;
-
-        return (_REGISTRY5 = this[REGISTRY]).options.apply(_REGISTRY5, arguments);
-      }
-    }, {
-      key: 'registerOptionsForType',
-      value: function registerOptionsForType() {
-        var _REGISTRY6;
-
-        return (_REGISTRY6 = this[REGISTRY]).optionsForType.apply(_REGISTRY6, arguments);
-      }
-    }, {
-      key: 'registeredOption',
-      value: function registeredOption() {
-        var _REGISTRY7;
-
-        return (_REGISTRY7 = this[REGISTRY]).getOption.apply(_REGISTRY7, arguments);
-      }
-    }, {
-      key: 'registeredOptions',
-      value: function registeredOptions() {
-        var _REGISTRY8;
-
-        return (_REGISTRY8 = this[REGISTRY]).getOptions.apply(_REGISTRY8, arguments);
-      }
-    }, {
-      key: 'registeredOptionsForType',
-      value: function registeredOptionsForType(type) {
-        if (this[REGISTRY].getOptionsForType) {
-          var _REGISTRY9;
-
-          return (_REGISTRY9 = this[REGISTRY]).getOptionsForType.apply(_REGISTRY9, arguments);
-        } else {
-          // used for Ember 1.10
-          return this[REGISTRY]._typeOptions[type];
-        }
-      }
-    }, {
-      key: 'resolveRegistration',
-      value: function resolveRegistration() {
-        var _REGISTRY10;
-
-        return (_REGISTRY10 = this[REGISTRY]).resolve.apply(_REGISTRY10, arguments);
-      }
-    }, {
-      key: 'unregister',
-      value: function unregister() {
-        var _REGISTRY11;
-
-        return (_REGISTRY11 = this[REGISTRY]).unregister.apply(_REGISTRY11, arguments);
-      }
-    }]);
-
-    return FakeOwner;
-  })();
-
-  exports['default'] = FakeOwner;
+  });
 });
-define('ember-getowner-polyfill/index', ['exports', 'ember', 'ember-getowner-polyfill/fake-owner'], function (exports, _ember, _emberGetownerPolyfillFakeOwner) {
-  'use strict';
+define("ember-getowner-polyfill/index", ["exports", "ember"], function (exports, _ember) {
+  "use strict";
 
-  var hasGetOwner = !!_ember['default'].getOwner;
+  _ember["default"].deprecate("ember-getowner-polyfill is now a true polyfill. Use Ember.getOwner directly instead of importing from ember-getowner-polyfill", false, {
+    id: "ember-getowner-polyfill.import",
+    until: '2.0.0'
+  });
 
-  exports['default'] = function (object) {
-    var owner = undefined;
-
-    if (hasGetOwner) {
-      owner = _ember['default'].getOwner(object);
-    }
-
-    if (!owner && object.container) {
-      owner = new _emberGetownerPolyfillFakeOwner['default'](object);
-    }
-
-    return owner;
-  };
+  exports["default"] = _ember["default"].getOwner;
 });
 define('ember-i18n/config/ar', ['exports', 'ember-i18n/config/constants'], function (exports, _emberI18nConfigConstants) {
   'use strict';
@@ -90935,18 +90935,44 @@ define('ember-i18n/config/zh', ['exports', 'ember-i18n/config/constants'], funct
 define('ember-i18n/helper', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
 
-  exports['default'] = _ember['default'].Helper.extend({
-    i18n: _ember['default'].inject.service(),
+  function _toArray(arr) {
+    return Array.isArray(arr) ? arr : Array.from(arr);
+  }
 
-    _locale: _ember['default'].computed.readOnly('i18n.locale'),
+  var get = _ember['default'].get;
+  var inject = _ember['default'].inject;
+  var Helper = _ember['default'].Helper;
+  var EmberObject = _ember['default'].Object;
+  var observer = _ember['default'].observer;
 
-    compute: function compute(params, interpolations) {
-      var key = params[0];
-      var i18n = this.get('i18n');
-      return i18n.t(key, interpolations);
+  function mergedContext(objectContext, hashContext) {
+    return EmberObject.extend({
+      unknownProperty: function unknownProperty(key) {
+        var fromHash = get(hashContext, key);
+        return fromHash === undefined ? get(objectContext, key) : fromHash;
+      }
+    }).create();
+  }
+
+  exports['default'] = Helper.extend({
+    i18n: inject.service(),
+
+    compute: function compute(_ref, interpolations) {
+      var _ref2 = _toArray(_ref);
+
+      var key = _ref2[0];
+      var _ref2$1 = _ref2[1];
+      var contextObject = _ref2$1 === undefined ? {} : _ref2$1;
+
+      var rest = _ref2.slice(2);
+
+      var mergedInterpolations = mergedContext(contextObject, interpolations);
+
+      var i18n = get(this, 'i18n');
+      return i18n.t(key, mergedInterpolations);
     },
 
-    _recomputeOnLocaleChange: _ember['default'].observer('_locale', function () {
+    _recomputeOnLocaleChange: observer('i18n.locale', function () {
       this.recompute();
     })
   });
@@ -90987,7 +91013,7 @@ define('ember-i18n/instance-initializers/ember-i18n', ['exports'], function (exp
     }
   };
 });
-define("ember-i18n/services/i18n", ["exports", "ember", "ember-getowner-polyfill", "ember-i18n/utils/locale", "ember-i18n/utils/add-translations", "ember-i18n/utils/get-locales"], function (exports, _ember, _emberGetownerPolyfill, _emberI18nUtilsLocale, _emberI18nUtilsAddTranslations, _emberI18nUtilsGetLocales) {
+define("ember-i18n/services/i18n", ["exports", "ember", "ember-i18n/utils/locale", "ember-i18n/utils/add-translations", "ember-i18n/utils/get-locales"], function (exports, _ember, _emberI18nUtilsLocale, _emberI18nUtilsAddTranslations, _emberI18nUtilsGetLocales) {
   "use strict";
 
   var assert = _ember["default"].assert;
@@ -90998,6 +91024,7 @@ define("ember-i18n/services/i18n", ["exports", "ember", "ember-getowner-polyfill
   var on = _ember["default"].on;
   var typeOf = _ember["default"].typeOf;
   var warn = _ember["default"].warn;
+  var getOwner = _ember["default"].getOwner;
 
   var Parent = _ember["default"].Service || _ember["default"].Object;
 
@@ -91058,7 +91085,7 @@ define("ember-i18n/services/i18n", ["exports", "ember", "ember-getowner-polyfill
 
     // @public
     addTranslations: function addTranslations(locale, translations) {
-      (0, _emberI18nUtilsAddTranslations["default"])(locale, translations, (0, _emberGetownerPolyfill["default"])(this));
+      (0, _emberI18nUtilsAddTranslations["default"])(locale, translations, getOwner(this));
       this._addLocale(locale);
 
       if (this.get('locale').indexOf(locale) === 0) {
@@ -91068,7 +91095,8 @@ define("ember-i18n/services/i18n", ["exports", "ember", "ember-getowner-polyfill
 
     // @private
     _initDefaults: on('init', function () {
-      var ENV = (0, _emberGetownerPolyfill["default"])(this)._lookupFactory('config:environment');
+      var owner = getOwner(this);
+      var ENV = owner.factoryFor('config:environment')["class"];
 
       if (this.get('locale') == null) {
         var defaultLocale = (ENV.i18n || {}).defaultLocale;
@@ -91093,7 +91121,7 @@ define("ember-i18n/services/i18n", ["exports", "ember", "ember-getowner-polyfill
     _locale: computed('locale', function () {
       var locale = this.get('locale');
 
-      return locale ? new _emberI18nUtilsLocale["default"](this.get('locale'), (0, _emberGetownerPolyfill["default"])(this)) : null;
+      return locale ? new _emberI18nUtilsLocale["default"](this.get('locale'), getOwner(this)) : null;
     })
   });
 });
@@ -91105,7 +91133,8 @@ define("ember-i18n/utils/add-translations", ["exports", "ember"], function (expo
   var assign = _ember["default"].assign || _ember["default"].merge;
   function addTranslations(locale, newTranslations, owner) {
     var key = "locale:" + locale + "/translations";
-    var existingTranslations = owner._lookupFactory(key);
+    var factory = owner.factoryFor(key);
+    var existingTranslations = factory && factory["class"];
 
     if (existingTranslations == null) {
       existingTranslations = {};
@@ -91227,8 +91256,7 @@ define('ember-i18n/utils/locale', ['exports', 'ember'], function (exports, _embe
           _this.pluralForm = config.pluralForm;
         }
       });
-
-      var defaultConfig = this.owner._lookupFactory('ember-i18n@config:zh');
+      var defaultConfig = this.owner.factoryFor('ember-i18n@config:zh')['class'];
 
       if (this.rtl === undefined) {
         warn('ember-i18n: No RTL configuration found for ' + this.id + '.', false, { id: 'ember-i18n.no-rtl-configuration' });
@@ -91289,8 +91317,8 @@ define('ember-i18n/utils/locale', ['exports', 'ember'], function (exports, _embe
 
     _defineMissingTranslationTemplate: function _defineMissingTranslationTemplate(key) {
       var i18n = this.owner.lookup('service:i18n');
-      var missingMessage = this.owner._lookupFactory('util:i18n/missing-message');
       var locale = this.id;
+      var missingMessage = this.owner.factoryFor('util:i18n/missing-message')['class'];
 
       function missingTranslation(data) {
         return missingMessage.call(i18n, locale, key, data);
@@ -91302,7 +91330,7 @@ define('ember-i18n/utils/locale', ['exports', 'ember'], function (exports, _embe
     },
 
     _compileTemplate: function _compileTemplate(key, string) {
-      var compile = this.owner._lookupFactory('util:i18n/compile-template');
+      var compile = this.owner.factoryFor('util:i18n/compile-template')['class'];
       var template = compile(string, this.rtl);
       this.translations[key] = template;
       return template;
@@ -91317,20 +91345,23 @@ define('ember-i18n/utils/locale', ['exports', 'ember'], function (exports, _embe
       assign(result, getFlattenedTranslations(parentId, owner));
     }
 
-    var translations = owner._lookupFactory('locale:' + id + '/translations') || {};
-    assign(result, withFlattenedKeys(translations));
+    var factory = owner.factoryFor('locale:' + id + '/translations');
+    var translations = factory && factory['class'];
+    assign(result, withFlattenedKeys(translations || {}));
 
     return result;
   }
 
   // Walk up confiugration objects from most specific to least.
   function walkConfigs(id, owner, fn) {
-    var appConfig = owner._lookupFactory('locale:' + id + '/config');
+    var maybeAppConfig = owner.factoryFor('locale:' + id + '/config');
+    var appConfig = maybeAppConfig && maybeAppConfig['class'];
     if (appConfig) {
       fn(appConfig);
     }
 
-    var addonConfig = owner._lookupFactory('ember-i18n@config:' + id);
+    var maybeAddonConfig = owner.factoryFor('ember-i18n@config:' + id);
+    var addonConfig = maybeAddonConfig && maybeAddonConfig['class'];
     if (addonConfig) {
       fn(addonConfig);
     }

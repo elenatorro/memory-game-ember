@@ -55,6 +55,8 @@
     "phantomjs": "^2.1.7"
   },
   "dependencies": {
+    "ember-elm": "0.1.0",
+    "ember-i18n": "5.0.0",
     "ember-uuid": "1.0.0",
     "phantom": "^2.1.21",
     "uuid": "^2.0.3"
